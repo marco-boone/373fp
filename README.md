@@ -47,6 +47,8 @@ This README has been adapted for an embedded STM32 firmware repo.
 <!-- About the Project -->
 ## About the Project
 
+This project was an attempt to recreate the Imogen Heap Musical Glove. The core idea was to create a wearable glove that enables the user to record, loop, edit, and playback music using gesture controls. Below are images of the Glove and the Board.
+
 <div align="center"> 
   <img src="assets/Glove.png" alt="screenshot" />
 </div>
@@ -58,6 +60,8 @@ This repo contains two STM32CubeIDE projects:
 
 - `Glove/`: reads 4 analog inputs (flex/force sensors) via ADC+DMA, reads an I2C accelerometer for hand orientation, builds a small command packet, and transmits it over UART.
 - `Board/`: recieves command packet from Glove and transitions through FSM accordingly. Reads and writes to an SD card via SPI. Recording is done via I2S communication protocol and MEMS microphone. Playback is done via DAC and audio jack.
+
+
 
 <!-- TechStack -->
 ### Tech Stack
@@ -71,44 +75,27 @@ This repo contains two STM32CubeIDE projects:
   </ul>
 </details>
 
-<!-- Features -->
-### Features
-
-- **Glove**: ADC+DMA averaging + baseline calibration for 4 analog channels.
-- **Glove**: I2C accelerometer readout → coarse hand pose (fingers up/down/horizontal, palm/back/edge up).
-- **Glove**: roll around X-axis mapped to a 1..10 value.
-- **Glove**: 7-byte command packet sent over `USART1` using DMA.
-- **Board**: ADC+DMA continuous scan of 4 channels → threshold to 4 single-byte bits → streamed over `USART2` (ST-Link VCP).
-
 <!-- Hardware -->
 ### Hardware
 
-- **MCU**: STM32L432KCUx (per both `.ioc` files)
-- **Dev board**: NUCLEO-L432KC
+#### MCUs
+- **Glove**: NUCLEO-L432KC
+- **Board**: STM32-L4R5ZI-P 
 
-#### ADC pins (both projects)
+#### Components
 
-| ADC channel | MCU pin |
-|---|---|
-| ADC1_IN5 | `PA0` |
-| ADC1_IN6 | `PA1` |
-| ADC1_IN9 | `PA4` |
-| ADC1_IN12 | `PA7` |
+##### Glove
+- **Wireless Module**: ESP32
+- **Flex Sensors**: 4x Flex sensors
+- **Force Sensors**: 1x Force sensor
+- **Accelerometer**: I2C accelerometer
 
-#### UART pins (both projects)
+##### Board
+- **SD Card**: SD Card 8GB 
+- **Microphone**: MEMS microphone
+- **Audio Jack**: 3.5mm analog audio jack
 
-- **USART1** (115200 8N1)
-  - TX `PA9`
-  - RX `PA10`
-- **USART2** (115200 8N1, ST-Link VCP on NUCLEO)
-  - TX `PA2`
-  - RX `PA15`
-
-#### I2C pins (Glove project)
-
-- **I2C1**
-  - SCL `PB6`
-  - SDA `PB7`
+> Note: for authoritative pinout/peripheral configuration, check the `.ioc` files in `Glove/` and `Board/`.
 
 <!-- Data formats -->
 ### Data formats
