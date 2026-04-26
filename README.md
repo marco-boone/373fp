@@ -1,62 +1,37 @@
 <!--
-Hey, thanks for using the awesome-readme-template template.  
-If you have any enhancements, then fork this project and create a pull request 
-or just open an issue with the label "enhancement".
-
-Don't forget to give this project a star for additional support ;)
-Maybe you can mention me or this repo in the acknowledgements too
--->
-
-<!--
-This README is a slimmed down version of the original one.
-Removed sections:
-- Screenshots
-- Running Test
-- Deployment
-- FAQ
-- Acknowledgements
+Template source: awesome-readme-template
+This README has been adapted for an embedded STM32 firmware repo.
 -->
 
 <div align="center">
 
   <img src="assets/logo.png" alt="logo" width="200" height="auto" />
-  <h1>Awesome Readme Template</h1>
+  <h1>373FP (Glove + Board firmware)</h1>
   
   <p>
-    An awesome README template for your projects! 
+    Two STM32CubeIDE projects for a glove-based input device and a companion board.
   </p>
 
-  
 <!-- Badges -->
 <p>
-  <a href="https://github.com/Louis3797/awesome-readme-template/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/Louis3797/awesome-readme-template" alt="contributors" />
+  <!-- TODO: replace with your repo badges (or delete this block) -->
+  <a href="">
+    <img src="https://img.shields.io/badge/MCU-STM32L432KCUx-blue" alt="mcu" />
   </a>
   <a href="">
-    <img src="https://img.shields.io/github/last-commit/Louis3797/awesome-readme-template" alt="last update" />
+    <img src="https://img.shields.io/badge/IDE-STM32CubeIDE-lightgrey" alt="ide" />
   </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/network/members">
-    <img src="https://img.shields.io/github/forks/Louis3797/awesome-readme-template" alt="forks" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/stargazers">
-    <img src="https://img.shields.io/github/stars/Louis3797/awesome-readme-template" alt="stars" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/issues/">
-    <img src="https://img.shields.io/github/issues/Louis3797/awesome-readme-template" alt="open issues" />
-  </a>
-  <a href="https://github.com/Louis3797/awesome-readme-template/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/Louis3797/awesome-readme-template.svg" alt="license" />
+  <a href="">
+    <img src="https://img.shields.io/badge/Board-NUCLEO--L432KC-lightgrey" alt="board" />
   </a>
 </p>
    
 <h4>
-    <a href="https://github.com/Louis3797/awesome-readme-template/">View Demo</a>
+    <a href="#getting-started">Getting started</a>
   <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template">Documentation</a>
+    <a href="#usage">Usage</a>
   <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template/issues/">Report Bug</a>
-  <span> · </span>
-    <a href="https://github.com/Louis3797/awesome-readme-template/issues/">Request Feature</a>
+    <a href="#roadmap">Roadmap</a>
   </h4>
 </div>
 
@@ -68,8 +43,8 @@ Removed sections:
 - [About the Project](#about-the-project)
   * [Tech Stack](#tech-stack)
   * [Features](#features)
-  * [Color Reference](#color-reference)
-  * [Environment Variables](#environment-variables)
+  * [Hardware](#hardware)
+  * [Data formats](#data-formats)
 - [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -87,83 +62,108 @@ Removed sections:
 ## About the Project
 
 <div align="center"> 
-  <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
+  <img src="https://placehold.co/600x400?text=Project+photo+placeholder" alt="screenshot" />
 </div>
+
+This repo contains two STM32CubeIDE projects:
+
+- `Glove/`: reads 4 analog inputs (flex/tap sensors) via ADC+DMA, reads an I2C accelerometer for hand orientation, builds a small command packet, and transmits it over UART.
+- `Board/`: reads 4 analog inputs via ADC+DMA, threshold-converts them to 0/1, and streams the 4-byte sample out over the ST-Link Virtual COM Port (UART).
+
+> The current `main.c` implementations already define packet formats and UARTs used; see [Data formats](#data-formats).
 
 
 <!-- TechStack -->
 ### Tech Stack
 
 <details>
-  <summary>Client</summary>
+  <summary>Firmware</summary>
   <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://nextjs.org/">Next.js</a></li>
-    <li><a href="https://reactjs.org/">React.js</a></li>
-    <li><a href="https://tailwindcss.com/">TailwindCSS</a></li>
+    <li><a href="https://www.st.com/en/development-tools/stm32cubeide.html">STM32CubeIDE</a> (CubeMX-generated HAL projects)</li>
+    <li>STM32 HAL + CMSIS</li>
+    <li>C (GCC toolchain)</li>
   </ul>
 </details>
 
 <details>
-  <summary>Server</summary>
+  <summary>Peripherals used</summary>
   <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://expressjs.com/">Express.js</a></li>
-    <li><a href="https://go.dev/">Golang</a></li>
-    <li><a href="https://nestjs.com/">Nest.js</a></li>
-    <li><a href="https://socket.io/">SocketIO</a></li>
-    <li><a href="https://www.prisma.io/">Prisma</a></li>    
-    <li><a href="https://www.apollographql.com/">Apollo</a></li>
-    <li><a href="https://graphql.org/">GraphQL</a></li>
-  </ul>
-</details>
-
-<details>
-<summary>Database</summary>
-  <ul>
-    <li><a href="https://www.mysql.com/">MySQL</a></li>
-    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
-    <li><a href="https://redis.io/">Redis</a></li>
-    <li><a href="https://neo4j.com/">Neo4j</a></li>
-    <li><a href="https://www.mongodb.com/">MongoDB</a></li>
-  </ul>
-</details>
-
-<details>
-<summary>DevOps</summary>
-  <ul>
-    <li><a href="https://www.docker.com/">Docker</a></li>
-    <li><a href="https://www.jenkins.io/">Jenkins</a></li>
-    <li><a href="https://circleci.com/">CircleCLI</a></li>
+    <li>ADC1 + DMA (circular sampling)</li>
+    <li>USART1 + DMA (command TX)</li>
+    <li>USART2 (ST-Link VCP debug/streaming)</li>
+    <li>I2C1 (accelerometer)</li>
   </ul>
 </details>
 
 <!-- Features -->
 ### Features
 
-- Feature 1
-- Feature 2
-- Feature 3
+- **Glove**: ADC+DMA averaging + baseline calibration for 4 analog channels.
+- **Glove**: I2C accelerometer readout → coarse hand pose (fingers up/down/horizontal, palm/back/edge up).
+- **Glove**: roll around X-axis mapped to a 1..10 value.
+- **Glove**: 7-byte command packet sent over `USART1` using DMA.
+- **Board**: ADC+DMA continuous scan of 4 channels → threshold to 4 single-byte bits → streamed over `USART2` (ST-Link VCP).
 
-<!-- Color Reference -->
-### Color Reference
+<!-- Hardware -->
+### Hardware
 
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
+- **MCU**: STM32L432KCUx (per both `.ioc` files)
+- **Dev board**: NUCLEO-L432KC
 
+#### ADC pins (both projects)
 
-<!-- Env Variables -->
-### Environment Variables
+| ADC channel | MCU pin |
+|---|---|
+| ADC1_IN5 | `PA0` |
+| ADC1_IN6 | `PA1` |
+| ADC1_IN9 | `PA4` |
+| ADC1_IN12 | `PA7` |
 
-To run this project, you will need to add the following environment variables to your .env file
+#### UART pins (both projects)
 
-`API_KEY`
+- **USART1** (115200 8N1)
+  - TX `PA9`
+  - RX `PA10`
+- **USART2** (115200 8N1, ST-Link VCP on NUCLEO)
+  - TX `PA2`
+  - RX `PA15`
 
-`ANOTHER_API_KEY`
+#### I2C pins (Glove project)
+
+- **I2C1**
+  - SCL `PB6`
+  - SDA `PB7`
+
+<!-- Data formats -->
+### Data formats
+
+#### Glove → UART command packet (7 bytes)
+
+Sent from `Glove` over `USART1` (DMA TX), at ~2 Hz (500 ms loop delay):
+
+| Byte | Name | Meaning |
+|---:|---|---|
+| 0 | `mode` | Mode index \(0..3\), advanced via “tap” threshold on ADC channel 0 |
+| 1 | `flex1` | 1 if \(\Delta\) ADC ch1 exceeds threshold, else 0 |
+| 2 | `flex2` | 1 if \(\Delta\) ADC ch2 exceeds threshold, else 0 |
+| 3 | `flex3` | 1 if \(\Delta\) ADC ch3 exceeds threshold, else 0 |
+| 4 | `fingers_up` | 1 if accelerometer-derived pose says fingers up, else 0 |
+| 5 | `palm_up` | 1 if accelerometer-derived pose says palm up, else 0 |
+| 6 | `roll_x_1to10` | roll around X axis mapped to integer 1..10 |
+
+Notes:
+
+- The Glove code uses accelerometer addresses `0x32` (write) / `0x33` (read) as provided in the firmware.
+- The Glove also prints human-readable debug lines over `USART2` (ST-Link VCP).
+
+#### Board → UART bitstream (4 bytes)
+
+The `Board` project continuously samples 4 ADC channels via DMA and converts each to a single byte (0/1) using a fixed threshold:
+
+- **Threshold**: `1700` (12-bit ADC raw)
+- **Payload**: 4 bytes: `[b0, b1, b2, b3]` where `bi ∈ {0,1}`
+- **Output**: transmitted over `USART2` (ST-Link VCP) when ADC DMA half/full callbacks indicate new data is ready.
+
 
 <!-- Getting Started -->
 ## Getting Started
@@ -171,109 +171,87 @@ To run this project, you will need to add the following environment variables to
 <!-- Prerequisites -->
 ### Prerequisites
 
-This project uses Yarn as package manager
-
-```bash
- npm install --global yarn
-```
+- STM32CubeIDE (recommended)
+- A NUCLEO-L432KC (or compatible STM32L432KCUx target) for each project you want to run
+- USB cable(s) for ST-Link programming and Virtual COM Port
 
 <!-- Installation -->
 ### Installation
 
-Install my-project with npm
-
-```bash
-  yarn install my-project
-  cd my-project
-```
-
+Clone this repo (or download as ZIP) and open the project(s) in STM32CubeIDE.
 
 <!-- Run Locally -->
 ### Run Locally
 
-Clone the project
+In STM32CubeIDE:
 
-```bash
-  git clone https://github.com/Louis3797/awesome-readme-template.git
-```
+- Import `Glove/` as an existing STM32CubeIDE project.
+- Import `Board/` as an existing STM32CubeIDE project.
+- Build and flash each project to its target board.
 
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
-Install dependencies
-
-```bash
-  yarn install
-```
-
-Start the server
-
-```bash
-  yarn start
-```
+If you modify peripherals/pins, prefer doing it via the `.ioc` file and re-generating code (keeping user-code blocks).
 
 
 <!-- Usage -->
 ## Usage
 
-Use this space to tell a little more about your project and how it can be used. Show additional screenshots, code samples, demos or link to other resources.
+### Glove project (`Glove/`)
 
+- Flash `Glove` to a NUCLEO-L432KC.
+- Open a serial monitor on the ST-Link VCP port at `115200 8N1` to view debug output.
+- The firmware:
+  - starts ADC+DMA sampling of 4 channels and captures a baseline after ~500 ms
+  - reads an I2C accelerometer
+  - sends a 7-byte command packet over `USART1`
 
-```javascript
-import Component from 'my-project'
+### Board project (`Board/`)
 
-function App() {
-  return <Component />
-}
-```
+- Flash `Board` to a NUCLEO-L432KC.
+- Open a serial monitor on the ST-Link VCP port at `115200 8N1`.
+- You should see a repeating stream of 4 raw bytes, each either `0x00` or `0x01`, representing the 4 ADC channels after thresholding.
+
+### Wiring (if you are linking Glove → another device over USART1)
+
+- Connect `Glove PA9 (USART1_TX)` → receiver `USART1_RX`
+- Connect grounds together
+- Ensure both sides use **115200 8N1**
+
+> The current `Board` firmware does not yet parse the 7-byte Glove packet; it focuses on ADC→VCP streaming.
+
 
 <!-- Roadmap -->
 ## Roadmap
 
-* [x] Todo 1
-* [ ] Todo 2
+* [x] Glove: 7-byte command packet over `USART1` DMA TX
+* [x] Glove: basic accelerometer-derived pose + roll value
+* [x] Board: ADC threshold streaming over ST-Link VCP
+* [ ] Board: implement `USART1` RX parser for Glove command packet
+* [ ] Document sensor wiring / BOM and add real photos to `assets/`
 
 <!-- Contributing -->
 ## Contributing
 
-<a href="https://github.com/Louis3797/awesome-readme-template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Louis3797/awesome-readme-template" />
-</a>
-
-
 Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
-
+If you plan to change pinouts/peripherals, please update the `.ioc` file(s) and mention the changed wiring in the PR/commit description.
 
 <!-- Code of Conduct -->
 ### Code of Conduct
 
-Please read the [Code of Conduct](https://github.com/Louis3797/awesome-readme-template/blob/master/CODE_OF_CONDUCT.md)
-
+Please be respectful and constructive in issues and PRs.
 
 <!-- License -->
 ## License
 
-Distributed under the no License. See LICENSE.txt for more information.
-
+TBD. (Add a `LICENSE` file and update this section.)
 
 <!-- Contact -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+TBD. (Add your name + preferred contact and update this section.)
 
-Project Link: [https://github.com/Louis3797/awesome-readme-template](https://github.com/Louis3797/awesome-readme-template)
-
-<!-- Acknowledgments -->
+<!-- Acknowledgements -->
 ## Acknowledgements
 
-Use this section to mention useful resources and libraries that you have used in your projects.
-
  - [Shields.io](https://shields.io/)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [Emoji Cheat Sheet](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md#travel--places)
- - [Readme Template](https://github.com/othneildrew/Best-README-Template)
+ - [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html)
