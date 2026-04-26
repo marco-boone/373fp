@@ -16,7 +16,6 @@ This README has been adapted for an embedded STM32 firmware repo.
     <a href="#getting-started">Getting started</a>
   <span> · </span>
     <a href="#usage">Usage</a>
-  <span> · </span>
   </h4>
 </div>
 
@@ -59,14 +58,10 @@ This repo contains two STM32CubeIDE projects:
 <!-- TechStack -->
 ### Tech Stack
 
-<details>
-  <summary>Firmware</summary>
-  <ul>
-    <li><a href="https://www.st.com/en/development-tools/stm32cubeide.html">STM32CubeIDE</a> (CubeMX-generated HAL projects)</li>
-    <li>STM32 HAL + CMSIS</li>
-    <li>C (GCC toolchain)</li>
-  </ul>
-</details>
+- **Firmware**
+  - [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) (CubeMX-generated HAL projects)
+  - STM32 HAL + CMSIS
+  - C (GCC toolchain)
 
 <!-- Hardware -->
 ### Hardware
@@ -156,6 +151,7 @@ If you modify peripherals/pins, prefer doing it via the `.ioc` file and re-gener
 
 - Flash `Board` to a NUCLEO-L432KC.
 - Open a serial monitor on the ST-Link VCP port at respective baud rate (115200) to view debug output.
+- Controls a FSM to record, loop, edit, and playback music using gesture controls.
 
 ### Controls and Commands
 - Lift hand up and bend fingers to record a loop
