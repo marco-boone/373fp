@@ -11,20 +11,6 @@ This README has been adapted for an embedded STM32 firmware repo.
   <p>
     Two STM32CubeIDE projects for a glove-based input device and a companion board.
   </p>
-
-<!-- Badges -->
-<p>
-  <!-- TODO: replace with your repo badges (or delete this block) -->
-  <a href="">
-    <img src="https://img.shields.io/badge/MCU-STM32L432KCUx-blue" alt="mcu" />
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/IDE-STM32CubeIDE-lightgrey" alt="ide" />
-  </a>
-  <a href="">
-    <img src="https://img.shields.io/badge/Board-NUCLEO--L432KC-lightgrey" alt="board" />
-  </a>
-</p>
    
 <h4>
     <a href="#getting-started">Getting started</a>
@@ -62,16 +48,16 @@ This README has been adapted for an embedded STM32 firmware repo.
 ## About the Project
 
 <div align="center"> 
-  <img src="https://placehold.co/600x400?text=Project+photo+placeholder" alt="screenshot" />
+  <img src="assets/Glove.png" alt="screenshot" />
+</div>
+<div align="center"> 
+  <img src="assets/Board.png" alt="screenshot" />
 </div>
 
 This repo contains two STM32CubeIDE projects:
 
-- `Glove/`: reads 4 analog inputs (flex/tap sensors) via ADC+DMA, reads an I2C accelerometer for hand orientation, builds a small command packet, and transmits it over UART.
-- `Board/`: reads 4 analog inputs via ADC+DMA, threshold-converts them to 0/1, and streams the 4-byte sample out over the ST-Link Virtual COM Port (UART).
-
-> The current `main.c` implementations already define packet formats and UARTs used; see [Data formats](#data-formats).
-
+- `Glove/`: reads 4 analog inputs (flex/force sensors) via ADC+DMA, reads an I2C accelerometer for hand orientation, builds a small command packet, and transmits it over UART.
+- `Board/`: recieves command packet from Glove and transitions through FSM accordingly. Reads and writes to an SD card via SPI. Recording is done via I2S communication protocol and MEMS microphone. Playback is done via DAC and audio jack.
 
 <!-- TechStack -->
 ### Tech Stack
@@ -82,16 +68,6 @@ This repo contains two STM32CubeIDE projects:
     <li><a href="https://www.st.com/en/development-tools/stm32cubeide.html">STM32CubeIDE</a> (CubeMX-generated HAL projects)</li>
     <li>STM32 HAL + CMSIS</li>
     <li>C (GCC toolchain)</li>
-  </ul>
-</details>
-
-<details>
-  <summary>Peripherals used</summary>
-  <ul>
-    <li>ADC1 + DMA (circular sampling)</li>
-    <li>USART1 + DMA (command TX)</li>
-    <li>USART2 (ST-Link VCP debug/streaming)</li>
-    <li>I2C1 (accelerometer)</li>
   </ul>
 </details>
 
