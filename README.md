@@ -17,7 +17,6 @@ This README has been adapted for an embedded STM32 firmware repo.
   <span> · </span>
     <a href="#usage">Usage</a>
   <span> · </span>
-    <a href="#roadmap">Roadmap</a>
   </h4>
 </div>
 
@@ -36,12 +35,7 @@ This README has been adapted for an embedded STM32 firmware repo.
   * [Installation](#installation)
   * [Run Locally](#run-locally)
 - [Usage](#usage)
-- [Roadmap](#roadmap)
 - [Contributing](#contributing)
-  * [Code of Conduct](#code-of-conduct)
-- [License](#license)
-- [Contact](#contact)
-- [Acknowledgements](#acknowledgements)
   
 
 <!-- About the Project -->
@@ -60,7 +54,6 @@ This repo contains two STM32CubeIDE projects:
 
 - `Glove/`: reads 4 analog inputs (flex/force sensors) via ADC+DMA, reads an I2C accelerometer for hand orientation, builds a small command packet, and transmits it over UART.
 - `Board/`: recieves command packet from Glove and transitions through FSM accordingly. Reads and writes to an SD card via SPI. Recording is done via I2S communication protocol and MEMS microphone. Playback is done via DAC and audio jack.
-
 
 
 <!-- TechStack -->
@@ -100,33 +93,17 @@ This repo contains two STM32CubeIDE projects:
 <!-- Data formats -->
 ### Data formats
 
-#### Glove → UART command packet (7 bytes)
-
-Sent from `Glove` over `USART1` (DMA TX), at ~2 Hz (500 ms loop delay):
+#### Glove → Board Command Packet
 
 | Byte | Name | Meaning |
 |---:|---|---|
-| 0 | `mode` | Mode index \(0..3\), advanced via “tap” threshold on ADC channel 0 |
-| 1 | `flex1` | 1 if \(\Delta\) ADC ch1 exceeds threshold, else 0 |
-| 2 | `flex2` | 1 if \(\Delta\) ADC ch2 exceeds threshold, else 0 |
-| 3 | `flex3` | 1 if \(\Delta\) ADC ch3 exceeds threshold, else 0 |
+| 0 | `mode` | Mode index (0..3), advanced via "tap" threshold on ADC channel 0 |
+| 1 | `flex1` | 1 if ADC ch1 exceeds threshold, else 0 |
+| 2 | `flex2` | 1 if ADC ch2 exceeds threshold, else 0 |
+| 3 | `flex3` | 1 if ADC ch3 exceeds threshold, else 0 |
 | 4 | `fingers_up` | 1 if accelerometer-derived pose says fingers up, else 0 |
 | 5 | `palm_up` | 1 if accelerometer-derived pose says palm up, else 0 |
 | 6 | `roll_x_1to10` | roll around X axis mapped to integer 1..10 |
-
-Notes:
-
-- The Glove code uses accelerometer addresses `0x32` (write) / `0x33` (read) as provided in the firmware.
-- The Glove also prints human-readable debug lines over `USART2` (ST-Link VCP).
-
-#### Board → UART bitstream (4 bytes)
-
-The `Board` project continuously samples 4 ADC channels via DMA and converts each to a single byte (0/1) using a fixed threshold:
-
-- **Threshold**: `1700` (12-bit ADC raw)
-- **Payload**: 4 bytes: `[b0, b1, b2, b3]` where `bi ∈ {0,1}`
-- **Output**: transmitted over `USART2` (ST-Link VCP) when ADC DMA half/full callbacks indicate new data is ready.
-
 
 <!-- Getting Started -->
 ## Getting Started
@@ -135,8 +112,16 @@ The `Board` project continuously samples 4 ADC channels via DMA and converts eac
 ### Prerequisites
 
 - STM32CubeIDE (recommended)
-- A NUCLEO-L432KC (or compatible STM32L432KCUx target) for each project you want to run
+- A STM32-L4R5ZI-P (or compatible STM32L4R5ZI target) for the Board
+- A NUCLEO-L432KC (or compatible STM32L432KCUx target) for the Glove
 - USB cable(s) for ST-Link programming and Virtual COM Port
+- A SD Card 8GB for the Board
+- A MEMS microphone for the Board
+- A 3.5mm audio jack for the Board
+- A ESP32 for the Glove and Board
+- A Flex sensor for the Glove
+- A Force sensor for the Glove
+- A I2C accelerometer for the Glove
 
 <!-- Installation -->
 ### Installation
@@ -161,7 +146,7 @@ If you modify peripherals/pins, prefer doing it via the `.ioc` file and re-gener
 ### Glove project (`Glove/`)
 
 - Flash `Glove` to a NUCLEO-L432KC.
-- Open a serial monitor on the ST-Link VCP port at `115200 8N1` to view debug output.
+- Open a serial monitor on the ST-Link VCP port at respective baud rate (115200) to view debug output.
 - The firmware:
   - starts ADC+DMA sampling of 4 channels and captures a baseline after ~500 ms
   - reads an I2C accelerometer
@@ -170,26 +155,15 @@ If you modify peripherals/pins, prefer doing it via the `.ioc` file and re-gener
 ### Board project (`Board/`)
 
 - Flash `Board` to a NUCLEO-L432KC.
-- Open a serial monitor on the ST-Link VCP port at `115200 8N1`.
-- You should see a repeating stream of 4 raw bytes, each either `0x00` or `0x01`, representing the 4 ADC channels after thresholding.
+- Open a serial monitor on the ST-Link VCP port at respective baud rate (115200) to view debug output.
 
-### Wiring (if you are linking Glove → another device over USART1)
-
-- Connect `Glove PA9 (USART1_TX)` → receiver `USART1_RX`
-- Connect grounds together
-- Ensure both sides use **115200 8N1**
-
-> The current `Board` firmware does not yet parse the 7-byte Glove packet; it focuses on ADC→VCP streaming.
-
-
-<!-- Roadmap -->
-## Roadmap
-
-* [x] Glove: 7-byte command packet over `USART1` DMA TX
-* [x] Glove: basic accelerometer-derived pose + roll value
-* [x] Board: ADC threshold streaming over ST-Link VCP
-* [ ] Board: implement `USART1` RX parser for Glove command packet
-* [ ] Document sensor wiring / BOM and add real photos to `assets/`
+### Controls and Commands
+- Lift hand up and bend fingers to record a loop
+- Return hand to regular position (unbend fingers and lower hand) to stop recording
+- Tap the button on the board to switch between modes
+- Tilt hand left and right to adjust the roll value (1..10)
+- Left hand and bend fingers again to record and layer a new loop
+- Flip hand over to delete the current loop
 
 <!-- Contributing -->
 ## Contributing
@@ -197,24 +171,3 @@ If you modify peripherals/pins, prefer doing it via the `.ioc` file and re-gener
 Contributions are always welcome!
 
 If you plan to change pinouts/peripherals, please update the `.ioc` file(s) and mention the changed wiring in the PR/commit description.
-
-<!-- Code of Conduct -->
-### Code of Conduct
-
-Please be respectful and constructive in issues and PRs.
-
-<!-- License -->
-## License
-
-TBD. (Add a `LICENSE` file and update this section.)
-
-<!-- Contact -->
-## Contact
-
-TBD. (Add your name + preferred contact and update this section.)
-
-<!-- Acknowledgements -->
-## Acknowledgements
-
- - [Shields.io](https://shields.io/)
- - [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html)
